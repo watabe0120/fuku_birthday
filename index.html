@@ -3,109 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <title>ふくちゃん誕生日</title>
-
 <style>
-body {
-  background: #121212;
-  color: #fff;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
+body { background:#121212; color:#fff; font-family:Arial,sans-serif; margin:0; padding:0; }
+#volumeBox { position:fixed; top:20px; right:20px; background:rgba(0,0,0,0.7); padding:10px 15px; border-radius:10px; z-index:9999; font-size:14px; }
+#volumeControl { width:120px; }
+#muteBtn { margin-left:5px; padding:4px 8px; border-radius:5px; border:none; cursor:pointer; }
 
-/* タイトル */
-#titlePage {
-  text-align: center;
-  margin-top: 120px;
-}
+#titlePage { text-align:center; margin-top:120px; }
+#titlePage button { padding:12px 24px; font-size:18px; border:none; border-radius:6px; background:#4CAF50; color:white; cursor:pointer; }
 
-#titlePage h1 { font-size: 36px; }
-#titlePage p { font-size: 18px; margin: 20px 0; }
-
-#titlePage button {
-  padding: 12px 24px;
-  font-size: 18px;
-  border: none;
-  border-radius: 6px;
-  background: #4CAF50;
-  color: white;
-  cursor: pointer;
-}
-
-/* クイズ */
-#quizPage { display: none; margin-top: 50px; }
-
-.quiz-container {
-  width: 450px;
-  margin: auto;
-  background: #1e1e1e;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.choice {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  background: #2c2c2c;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-}
-
-.choice:hover { background: #3a3a3a; }
-
-.correct { background: #4CAF50 !important; }
-.wrong { background: #F44336 !important; }
-
-#nextBtn {
-  margin-top: 15px;
-  padding: 8px 18px;
-  display: none;
-  cursor: pointer;
-}
-
-iframe { margin-top: 15px; border-radius: 6px; }
-
-/* 終了 */
-#endVideoPage { display: none; text-align: center; margin-top: 50px; }
+#quizPage { display:none; margin-top:50px; }
+.quiz-container { width:450px; margin:auto; background:#1e1e1e; padding:20px; border-radius:10px; text-align:center; }
+.choice { display:block; width:100%; padding:10px; margin:8px 0; background:#2c2c2c; border:none; border-radius:5px; color:white; cursor:pointer; }
+.choice:hover { background:#3a3a3a; }
+#nextBtn { margin-top:15px; padding:8px 18px; display:none; cursor:pointer; }
+iframe { margin-top:15px; border-radius:6px; }
+#endVideoPage { display:none; text-align:center; margin-top:50px; }
 </style>
 </head>
-
 <body>
 
-<!-- タイトル -->
+<audio id="bgm" src="bgm.mp4" loop></audio>
+
+<div id="volumeBox">
+  🔊 <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5">
+  <button id="muteBtn" onclick="toggleMute()">🔇</button>
+</div>
+
 <div id="titlePage">
   <h1>🎉 ふくちゃん 🎉</h1>
   <h1>🎉 誕生日おめでとう 🎉</h1>
-  <p>テイストの違った誕生日プレゼントで</p>
   <p>楽しみながら挑戦してみてね！</p>
   <button onclick="startQuiz()">スタート！</button>
 </div>
 
-<!-- クイズ -->
 <div id="quizPage">
   <div class="quiz-container">
     <h2>ふくちゃんクイズ</h2>
     <p id="question"></p>
-
     <div id="choices"></div>
-
     <p id="result"></p>
-
     <div id="youtubeWrapper" style="display:none;">
-      <iframe id="videoFrame" width="100%" height="240"
-        frameborder="0" allowfullscreen></iframe>
+      <iframe id="videoFrame" width="100%" height="240" frameborder="0" allowfullscreen></iframe>
     </div>
-
     <button id="nextBtn" onclick="nextQuestion()">次へ</button>
   </div>
 </div>
 
-<!-- 終了 -->
 <div id="endVideoPage">
   <h1>お疲れさま！最後はこちら！🎉</h1>
   <iframe width="560" height="315"
@@ -114,20 +58,35 @@ iframe { margin-top: 15px; border-radius: 6px; }
 </div>
 
 <script>
+const bgm = document.getElementById("bgm");
+const volumeControl = document.getElementById("volumeControl");
+bgm.volume = volumeControl.value;
 
+volumeControl.addEventListener("input", function(){ bgm.volume = this.value; });
+
+function toggleMute() {
+  bgm.muted = !bgm.muted;
+  document.getElementById("muteBtn").textContent = bgm.muted ? "🔊" : "🔇";
+}
+
+// 5択3問クイズ
 const quizData = [
 {
   question: "みんなが思うふくちゃんのすきなところは？",
-  choices: [
-    "何事にも真っ向勝負なところ",
-    "元気",
-    "動画編集ができる",
-    "優しい",
-    "努力家"
-  ],
-  answers: [0,1,2,3,4],
+  choices: ["優しい","元気","努力家","明るい","行動力"],
   youtubePerChoice: [
-    "https://youtube.com/shorts/BIK70Nmy4Po",
+    "https://www.youtube.com/embed/L_jWHffIx5E",
+    "https://www.youtube.com/embed/M7lc1UVf-VE",
+    "https://www.youtube.com/embed/9bZkp7q19f0",
+    "https://www.youtube.com/embed/L_jWHffIx5E",
+    "https://www.youtube.com/embed/M7lc1UVf-VE"
+  ]
+},
+{
+  question: "ふくちゃんのすごいところは？",
+  choices: ["行動力","明るさ","才能","センス","包容力"],
+  youtubePerChoice: [
+    "https://www.youtube.com/embed/9bZkp7q19f0",
     "https://www.youtube.com/embed/L_jWHffIx5E",
     "https://www.youtube.com/embed/M7lc1UVf-VE",
     "https://www.youtube.com/embed/9bZkp7q19f0",
@@ -135,94 +94,70 @@ const quizData = [
   ]
 },
 {
-  question: "ふくちゃんのすごいところは？",
-  choices: [
-    "行動力",
-    "明るさ",
-    "才能",
-    "センス",
-    "包容力"
-  ],
-  answers: [0,1,2,3,4],
+  question: "ふくちゃんにこれから頑張ってほしいことは？",
+  choices: ["夢を追い続ける","今のままで輝く","さらに挑戦する","健康第一","仲間を大切に"],
   youtubePerChoice: [
+    "https://www.youtube.com/embed/M7lc1UVf-VE",
     "https://www.youtube.com/embed/9bZkp7q19f0",
     "https://www.youtube.com/embed/L_jWHffIx5E",
     "https://www.youtube.com/embed/M7lc1UVf-VE",
-    "https://www.youtube.com/embed/9bZkp7q19f0",
-    "https://www.youtube.com/embed/L_jWHffIx5E"
+    "https://www.youtube.com/embed/9bZkp7q19f0"
   ]
 }
 ];
 
 let currentQuestion = 0;
 
-const questionEl = document.getElementById("question");
-const choicesEl = document.getElementById("choices");
-const resultEl = document.getElementById("result");
-const videoFrame = document.getElementById("videoFrame");
-const youtubeWrapper = document.getElementById("youtubeWrapper");
-const nextBtn = document.getElementById("nextBtn");
-
 function startQuiz() {
   document.getElementById("titlePage").style.display = "none";
   document.getElementById("quizPage").style.display = "block";
+
+  bgm.currentTime = 0;
+  const playPromise = bgm.play();
+  if (playPromise !== undefined){
+    playPromise.catch(()=>alert("音声再生がブロックされました。画面をタップしてください。"));
+  }
+
   loadQuestion();
 }
 
 function loadQuestion() {
   const q = quizData[currentQuestion];
-
-  questionEl.textContent = q.question;
-  resultEl.textContent = "";
-  youtubeWrapper.style.display = "none";
-  videoFrame.src = "";
-  nextBtn.style.display = "none";
-
+  document.getElementById("question").textContent = q.question;
+  document.getElementById("result").textContent = "";
+  document.getElementById("youtubeWrapper").style.display = "none";
+  document.getElementById("videoFrame").src = "";
+  document.getElementById("nextBtn").style.display = "none";
+  const choicesEl = document.getElementById("choices");
   choicesEl.innerHTML = "";
 
-  // ★ 常に5択表示
-  for (let i = 0; i < 5; i++) {
+  for(let i=0;i<q.choices.length;i++){
     const btn = document.createElement("button");
     btn.textContent = q.choices[i];
     btn.className = "choice";
-    btn.onclick = () => checkAnswer(i);
+    btn.onclick = ()=>checkAnswer(i);
     choicesEl.appendChild(btn);
   }
 }
 
-function checkAnswer(selected) {
+function checkAnswer(selected){
   const q = quizData[currentQuestion];
-  const buttons = document.querySelectorAll(".choice");
-
-  buttons.forEach(btn => {
-    btn.classList.remove("correct", "wrong");
-  });
-
-  if (q.answers.includes(selected)) {
-    buttons[selected].classList.add("correct");
-    resultEl.textContent = "正解！🎉";
-  } else {
-    buttons[selected].classList.add("wrong");
-    resultEl.textContent = "不正解…😢";
-  }
-
-  youtubeWrapper.style.display = "block";
-  videoFrame.src = q.youtubePerChoice[selected] + "?autoplay=1&mute=1";
-
-  nextBtn.style.display = "inline-block";
+  document.getElementById("result").textContent = "素敵な選択！🎉";
+  document.getElementById("youtubeWrapper").style.display = "block";
+  document.getElementById("videoFrame").src = q.youtubePerChoice[selected] + "?autoplay=1&mute=1";
+  document.getElementById("nextBtn").style.display = "inline-block";
 }
 
-function nextQuestion() {
+function nextQuestion(){
   currentQuestion++;
-  if (currentQuestion < quizData.length) {
+  if(currentQuestion<quizData.length){
     loadQuestion();
-  } else {
+  }else{
+    bgm.pause();
     document.getElementById("quizPage").style.display = "none";
     document.getElementById("endVideoPage").style.display = "block";
   }
 }
-
 </script>
-
 </body>
 </html>
