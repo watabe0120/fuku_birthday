@@ -1,229 +1,227 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>ふくちゃん誕生日</title>
+<meta charset="UTF-8">
+<title>ふくちゃん誕生日</title>
 
-  <style>
-    body {
-      background: #121212;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+body {
+  background: #121212;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
-    /* タイトルページ */
-    #titlePage {
-      text-align: center;
-      margin-top: 120px;
-    }
-    #titlePage h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
-    }
-    #titlePage p {
-      font-size: 18px;
-      margin-bottom: 30px;
-    }
-    #titlePage button {
-      padding: 12px 24px;
-      font-size: 18px;
-      border: none;
-      border-radius: 6px;
-      background: #4CAF50;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    #titlePage button:hover { background: #45a049; }
+/* タイトル */
+#titlePage {
+  text-align: center;
+  margin-top: 120px;
+}
 
-    /* クイズページ */
-    #quizPage {
-      display: none;
-      margin-top: 50px;
-    }
+#titlePage h1 { font-size: 36px; }
+#titlePage p { font-size: 18px; margin: 20px 0; }
 
-    .quiz-container {
-      width: 450px;
-      margin: 50px auto;
-      background: #1e1e1e;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-    }
+#titlePage button {
+  padding: 12px 24px;
+  font-size: 18px;
+  border: none;
+  border-radius: 6px;
+  background: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
 
-    .quiz-container img {
-      display: block;
-      margin: 0 auto 15px;
-      width: 150px;
-      border-radius: 8px;
-    }
+/* クイズ */
+#quizPage { display: none; margin-top: 50px; }
 
-    .choice {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      background: #2c2c2c;
-      border: none;
-      border-radius: 5px;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .choice:hover { background: #3a3a3a; }
-    .correct { background: #4CAF50 !important; }
-    .wrong { background: #F44336 !important; }
+.quiz-container {
+  width: 450px;
+  margin: auto;
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
 
-    #result { margin-top: 12px; font-size: 18px; }
-    #nextBtn { margin-top: 15px; padding: 8px 18px; display: none; cursor: pointer; }
-    iframe { margin-top: 15px; border-radius: 6px; }
+.choice {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  background: #2c2c2c;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
 
-    /* 終了動画ページ */
-    #endVideoPage { display: none; text-align: center; margin-top:50px; }
-    #endVideoPage h1 { font-size: 28px; margin-bottom:20px; }
-  </style>
+.choice:hover { background: #3a3a3a; }
+
+.correct { background: #4CAF50 !important; }
+.wrong { background: #F44336 !important; }
+
+#nextBtn {
+  margin-top: 15px;
+  padding: 8px 18px;
+  display: none;
+  cursor: pointer;
+}
+
+iframe { margin-top: 15px; border-radius: 6px; }
+
+/* 終了 */
+#endVideoPage { display: none; text-align: center; margin-top: 50px; }
+</style>
 </head>
+
 <body>
 
-<!-- タイトルページ -->
+<!-- タイトル -->
 <div id="titlePage">
   <h1>🎉 ふくちゃん 🎉</h1>
   <h1>🎉 誕生日おめでとう 🎉</h1>
+  <p>テイストの違った誕生日プレゼントで</p>
   <p>楽しみながら挑戦してみてね！</p>
   <button onclick="startQuiz()">スタート！</button>
 </div>
 
-<!-- クイズページ -->
+<!-- クイズ -->
 <div id="quizPage">
   <div class="quiz-container">
-    <img src="logo.jpg" alt="ロゴ">
-    <h1>ふくちゃんクイズ</h1>
+    <h2>ふくちゃんクイズ</h2>
     <p id="question"></p>
-    <button class="choice" onclick="checkAnswer(0)"></button>
-    <button class="choice" onclick="checkAnswer(1)"></button>
-    <button class="choice" onclick="checkAnswer(2)"></button>
-    <button class="choice" onclick="checkAnswer(3)"></button>
-    <button class="choice" onclick="checkAnswer(4)"></button>
-    <button class="choice" onclick="checkAnswer(5)"></button>
-    <button class="choice" onclick="checkAnswer(6)"></button>
-    <button class="choice" onclick="checkAnswer(7)"></button>
-    <button class="choice" onclick="checkAnswer(8)"></button>
-    <button class="choice" onclick="checkAnswer(9)"></button>
-    
+
+    <div id="choices"></div>
+
     <p id="result"></p>
+
     <div id="youtubeWrapper" style="display:none;">
-      <iframe id="correctYoutube" width="100%" height="240" src="" frameborder="0" allowfullscreen></iframe>
+      <iframe id="videoFrame" width="100%" height="240"
+        frameborder="0" allowfullscreen></iframe>
     </div>
+
     <button id="nextBtn" onclick="nextQuestion()">次へ</button>
   </div>
 </div>
 
-<!-- 終了動画ページ -->
+<!-- 終了 -->
 <div id="endVideoPage">
   <h1>お疲れさま！最後はこちら！🎉</h1>
-  <iframe id="endVideo" width="560" height="315" 
-          src="https://www.youtube.com/embed/TlP0V-h_aOI?autoplay=1&mute=0" 
-          frameborder="0" allowfullscreen>
-  </iframe>
+  <iframe width="560" height="315"
+    src="https://www.youtube.com/embed/TlP0V-h_aOI?autoplay=1"
+    frameborder="0" allowfullscreen></iframe>
 </div>
 
 <script>
-  const quizData = [
-    {
-      question: "みんなが思うふくちゃんのすきなところは？",
-      choices: ["サックスがうまい", "元気", "動画編集ができる","あ","あ","あ","あ","あ","あ","あ"],
-      answers: [0,1,2,3,4,5,6,7,8,9],
-      youtubePerChoice: [
-        "https://www.youtube.com/embed/9bZkp7q19f0",
-        "https://www.youtube.com/embed/L_jWHffIx5E",
-        "https://www.youtube.com/embed/M7lc1UVf-VE",
-        "https://www.youtube.com/embed/9bZkp7q19f0",
-        "https://www.youtube.com/embed/L_jWHffIx5E",
-        "https://www.youtube.com/embed/M7lc1UVf-VE",
-        "https://www.youtube.com/embed/9bZkp7q19f0",
-        "https://www.youtube.com/embed/L_jWHffIx5E",
-        "https://www.youtube.com/embed/M7lc1UVf-VE",
-        "https://www.youtube.com/embed/M7lc1UVf-VE"
-      ]
-    },
-    {
-      question: "みんなが思うふくちゃんのすきなところは？",
-      choices: ["サックスがうまい", "元気", "動画編集ができる","","","","","","",""],
-      answers: [0,1,2,3,4,5,6,7,8,9],
-      youtubePerChoice: [
-        "https://www.youtube.com/embed/9bZkp7q19f0",
-        "https://www.youtube.com/embed/L_jWHffIx5E",
-        "https://www.youtube.com/embed/M7lc1UVf-VE"
-      ]
-    }
-  ];
 
-  let currentQuestion = 0;
-  const questionEl = document.getElementById("question");
-  const choiceButtons = document.querySelectorAll(".choice");
-  const resultEl = document.getElementById("result");
-  const nextBtn = document.getElementById("nextBtn");
-  const youtubeWrapper = document.getElementById("youtubeWrapper");
-  const correctYoutube = document.getElementById("correctYoutube");
+const quizData = [
+{
+  question: "みんなが思うふくちゃんのすきなところは？",
+  choices: [
+    "何事にも真っ向勝負なところ",
+    "元気",
+    "動画編集ができる",
+    "優しい",
+    "努力家"
+  ],
+  answers: [0,1,2,3,4],
+  youtubePerChoice: [
+    "https://youtube.com/shorts/BIK70Nmy4Po",
+    "https://www.youtube.com/embed/L_jWHffIx5E",
+    "https://www.youtube.com/embed/M7lc1UVf-VE",
+    "https://www.youtube.com/embed/9bZkp7q19f0",
+    "https://www.youtube.com/embed/L_jWHffIx5E"
+  ]
+},
+{
+  question: "ふくちゃんのすごいところは？",
+  choices: [
+    "行動力",
+    "明るさ",
+    "才能",
+    "センス",
+    "包容力"
+  ],
+  answers: [0,1,2,3,4],
+  youtubePerChoice: [
+    "https://www.youtube.com/embed/9bZkp7q19f0",
+    "https://www.youtube.com/embed/L_jWHffIx5E",
+    "https://www.youtube.com/embed/M7lc1UVf-VE",
+    "https://www.youtube.com/embed/9bZkp7q19f0",
+    "https://www.youtube.com/embed/L_jWHffIx5E"
+  ]
+}
+];
 
-  function startQuiz() {
-    document.getElementById("titlePage").style.display = "none";
-    document.getElementById("quizPage").style.display = "block";
+let currentQuestion = 0;
+
+const questionEl = document.getElementById("question");
+const choicesEl = document.getElementById("choices");
+const resultEl = document.getElementById("result");
+const videoFrame = document.getElementById("videoFrame");
+const youtubeWrapper = document.getElementById("youtubeWrapper");
+const nextBtn = document.getElementById("nextBtn");
+
+function startQuiz() {
+  document.getElementById("titlePage").style.display = "none";
+  document.getElementById("quizPage").style.display = "block";
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const q = quizData[currentQuestion];
+
+  questionEl.textContent = q.question;
+  resultEl.textContent = "";
+  youtubeWrapper.style.display = "none";
+  videoFrame.src = "";
+  nextBtn.style.display = "none";
+
+  choicesEl.innerHTML = "";
+
+  // ★ 常に5択表示
+  for (let i = 0; i < 5; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = q.choices[i];
+    btn.className = "choice";
+    btn.onclick = () => checkAnswer(i);
+    choicesEl.appendChild(btn);
+  }
+}
+
+function checkAnswer(selected) {
+  const q = quizData[currentQuestion];
+  const buttons = document.querySelectorAll(".choice");
+
+  buttons.forEach(btn => {
+    btn.classList.remove("correct", "wrong");
+  });
+
+  if (q.answers.includes(selected)) {
+    buttons[selected].classList.add("correct");
+    resultEl.textContent = "正解！🎉";
+  } else {
+    buttons[selected].classList.add("wrong");
+    resultEl.textContent = "不正解…😢";
+  }
+
+  youtubeWrapper.style.display = "block";
+  videoFrame.src = q.youtubePerChoice[selected] + "?autoplay=1&mute=1";
+
+  nextBtn.style.display = "inline-block";
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion < quizData.length) {
     loadQuestion();
+  } else {
+    document.getElementById("quizPage").style.display = "none";
+    document.getElementById("endVideoPage").style.display = "block";
   }
+}
 
-  function loadQuestion() {
-    resultEl.textContent = "";
-    nextBtn.style.display = "none";
-    youtubeWrapper.style.display = "none";
-    correctYoutube.src = "";
-
-    choiceButtons.forEach(btn => {
-      btn.classList.remove("correct", "wrong");
-      btn.disabled = false;
-      btn.style.display = "block";
-    });
-
-    const q = quizData[currentQuestion];
-    questionEl.textContent = q.question;
-    q.choices.forEach((choice, index) => {
-      choiceButtons[index].textContent = choice;
-    });
-  }
-
-  function checkAnswer(selected) {
-    const q = quizData[currentQuestion];
-    choiceButtons.forEach(btn => btn.disabled = true);
-
-    if (q.answers.includes(selected)) {
-      choiceButtons[selected].classList.add("correct");
-      resultEl.textContent = "正解！🎉";
-    } else {
-      choiceButtons[selected].classList.add("wrong");
-      resultEl.textContent = "不正解…😢";
-    }
-
-    youtubeWrapper.style.display = "block";
-    correctYoutube.src = q.youtubePerChoice[selected] + "?autoplay=1&mute=1";
-
-    nextBtn.style.display = "inline-block";
-  }
-
-  function nextQuestion() {
-    currentQuestion++;
-    if (currentQuestion < quizData.length) {
-      loadQuestion();
-    } else {
-      // クイズページ非表示
-      document.getElementById("quizPage").style.display = "none";
-      // 終了動画ページ表示
-      document.getElementById("endVideoPage").style.display = "block";
-    }
-  }
 </script>
 
 </body>
