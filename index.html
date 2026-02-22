@@ -2,25 +2,121 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>ふくちゃん誕生日</title>
+
 <style>
-body { background:#121212; color:#fff; font-family:Arial,sans-serif; margin:0; padding:0; }
+body {
+  background:#121212;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  margin:0;
+  padding:0;
+}
 
-#titlePage { text-align:center; margin-top:120px; }
-#titlePage button { padding:12px 24px; font-size:18px; border:none; border-radius:6px; background:#4CAF50; color:white; cursor:pointer; }
+/* タイトルページ */
+#titlePage {
+  text-align:center;
+  margin-top:120px;
+  padding:20px;
+}
 
-#quizPage { display:none; margin-top:50px; }
-.quiz-container { width:500px; margin:auto; background:#1e1e1e; padding:20px; border-radius:10px; text-align:center; }
-.choice { display:block; width:100%; padding:10px; margin:8px 0; background:#2c2c2c; border:none; border-radius:5px; color:white; cursor:pointer; }
-.choice:hover { background:#3a3a3a; }
-#nextBtn { margin-top:15px; padding:8px 18px; display:none; cursor:pointer; }
-iframe { margin-top:15px; border-radius:6px; width:100%; height:280px; }
+#titlePage button {
+  padding:14px 28px;
+  font-size:18px;
+  border:none;
+  border-radius:8px;
+  background:#4CAF50;
+  color:white;
+  cursor:pointer;
+}
 
-#endVideoPage { display:none; text-align:center; margin-top:50px; }
+#titlePage button:hover {
+  background:#45a049;
+}
+
+/* クイズページ */
+#quizPage {
+  display:none;
+  margin-top:50px;
+  padding:20px;
+}
+
+.quiz-container {
+  width:90%;
+  max-width:500px;
+  margin:auto;
+  background:#1e1e1e;
+  padding:25px;
+  border-radius:12px;
+  text-align:center;
+  box-shadow:0 0 15px rgba(0,0,0,0.5);
+}
+
+.choice {
+  display:block;
+  width:100%;
+  padding:14px;
+  margin:10px 0;
+  background:#2c2c2c;
+  border:none;
+  border-radius:8px;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.choice:hover {
+  background:#3a3a3a;
+}
+
+#nextBtn {
+  margin-top:15px;
+  padding:10px 22px;
+  display:none;
+  border:none;
+  border-radius:8px;
+  background:#4CAF50;
+  color:white;
+  cursor:pointer;
+}
+
+/* 動画（全ページ共通） */
+iframe {
+  margin-top:15px;
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:8px;
+}
+
+/* エンディングページ */
+#endVideoPage {
+  display:none;
+  margin-top:50px;
+  padding:20px;
+  text-align:center;
+}
+
+/* スマホ微調整 */
+@media (max-width:480px){
+  #titlePage {
+    margin-top:80px;
+  }
+
+  h1 {
+    font-size:22px;
+  }
+
+  .quiz-container {
+    padding:20px;
+  }
+}
 </style>
 </head>
 <body>
 
+<!-- タイトル -->
 <div id="titlePage">
   <h1>🎉 ふくちゃん 🎉</h1>
   <h1>🎉 誕生日おめでとう 🎉</h1>
@@ -28,6 +124,7 @@ iframe { margin-top:15px; border-radius:6px; width:100%; height:280px; }
   <button onclick="startQuiz()">スタート！</button>
 </div>
 
+<!-- クイズページ -->
 <div id="quizPage">
   <div class="quiz-container">
     <h2>ふくちゃんクイズ</h2>
@@ -47,6 +144,7 @@ iframe { margin-top:15px; border-radius:6px; width:100%; height:280px; }
   </div>
 </div>
 
+<!-- エンディング -->
 <div id="endVideoPage">
   <div class="quiz-container">
     <h1>🎉 改めて誕生日おめでとう！🎉</h1>
@@ -62,10 +160,10 @@ iframe { margin-top:15px; border-radius:6px; width:100%; height:280px; }
 
 <script>
 
-// 🔥 youtu.be もそのまま使えるように自動変換
+// youtu.be → embed変換
 function convertToEmbed(url){
   if(url.includes("youtu.be/")){
-    const id = url.split("youtu.be/")[1];
+    const id = url.split("youtu.be/")[1].split("?")[0];
     return "https://www.youtube.com/embed/" + id;
   }
   return url;
@@ -80,7 +178,7 @@ const quizData = [
       "https://youtu.be/fpxalgJ0Svo",
       "https://youtu.be/H5i2giLYp5M",
       "https://youtu.be/9J7NDj3x4mc",
-      "https://youtu.be/QLY_0-Tsw14?si=hSXkChxAt_-MoDSu",
+      "https://youtu.be/QLY_0-Tsw14",
       "https://youtu.be/aXlZ9Gun2gI"
     ]
   },
@@ -92,7 +190,7 @@ const quizData = [
       "https://youtu.be/JAkhFqdXWaU",
       "https://youtu.be/pjDBJkqLqnI",
       "https://youtu.be/IRUVDFOVJ9w",
-      "https://youtu.be/QLY_0-Tsw14?si=hSXkChxAt_-MoDSu",
+      "https://youtu.be/QLY_0-Tsw14",
       "https://youtu.be/NvlI8-LPjk4"
     ]
   },
@@ -104,7 +202,7 @@ const quizData = [
       "https://youtu.be/OoegHu6Wm6Y",
       "https://youtu.be/co-3cVDF8zg",
       "https://youtu.be/gd09NqOwUSc",
-      "https://youtu.be/QLY_0-Tsw14?si=hSXkChxAt_-MoDSu",
+      "https://youtu.be/QLY_0-Tsw14",
       "https://youtu.be/xR7CKmwyVzg",
       "https://youtu.be/q_uTN6iLcOY"
     ]
