@@ -5,30 +5,21 @@
 <title>ふくちゃん誕生日</title>
 <style>
 body { background:#121212; color:#fff; font-family:Arial,sans-serif; margin:0; padding:0; }
-#volumeBox { position:fixed; top:20px; right:20px; background:rgba(0,0,0,0.7); padding:10px 15px; border-radius:10px; z-index:9999; font-size:14px; }
-#volumeControl { width:120px; }
-#muteBtn { margin-left:5px; padding:4px 8px; border-radius:5px; border:none; cursor:pointer; }
 
 #titlePage { text-align:center; margin-top:120px; }
 #titlePage button { padding:12px 24px; font-size:18px; border:none; border-radius:6px; background:#4CAF50; color:white; cursor:pointer; }
 
 #quizPage { display:none; margin-top:50px; }
-.quiz-container { width:450px; margin:auto; background:#1e1e1e; padding:20px; border-radius:10px; text-align:center; }
+.quiz-container { width:500px; margin:auto; background:#1e1e1e; padding:20px; border-radius:10px; text-align:center; }
 .choice { display:block; width:100%; padding:10px; margin:8px 0; background:#2c2c2c; border:none; border-radius:5px; color:white; cursor:pointer; }
 .choice:hover { background:#3a3a3a; }
 #nextBtn { margin-top:15px; padding:8px 18px; display:none; cursor:pointer; }
-iframe { margin-top:15px; border-radius:6px; }
+iframe { margin-top:15px; border-radius:6px; width:100%; height:280px; }
+
 #endVideoPage { display:none; text-align:center; margin-top:50px; }
 </style>
 </head>
 <body>
-
-<audio id="bgm" src="bgm.mp3" loop></audio>
-
-<div id="volumeBox">
-  🔊 <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5">
-  <button id="muteBtn" onclick="toggleMute()">🔇</button>
-</div>
 
 <div id="titlePage">
   <h1>🎉 ふくちゃん 🎉</h1>
@@ -43,121 +34,140 @@ iframe { margin-top:15px; border-radius:6px; }
     <p id="question"></p>
     <div id="choices"></div>
     <p id="result"></p>
+
     <div id="youtubeWrapper" style="display:none;">
-      <iframe id="videoFrame" width="100%" height="240" frameborder="0" allowfullscreen></iframe>
+      <iframe id="videoFrame"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+      </iframe>
     </div>
+
     <button id="nextBtn" onclick="nextQuestion()">次へ</button>
   </div>
 </div>
 
 <div id="endVideoPage">
-  <h1>お疲れさま！最後はこちら！🎉</h1>
-  <iframe width="560" height="315"
-    src="https://www.youtube.com/embed/TlP0V-h_aOI?autoplay=1"
-    frameborder="0" allowfullscreen></iframe>
+  <h1>🎉 本当にお疲れさま！ 🎉</h1>
+  <p>最後にスペシャル動画をどうぞ！</p>
+
+  <iframe id="finalVideo"
+    frameborder="0"
+    allow="autoplay; encrypted-media"
+    allowfullscreen>
+  </iframe>
 </div>
 
 <script>
-const bgm = document.getElementById("bgm");
-const volumeControl = document.getElementById("volumeControl");
-bgm.volume = volumeControl.value;
 
-volumeControl.addEventListener("input", function(){ bgm.volume = this.value; });
-
-function toggleMute() {
-  bgm.muted = !bgm.muted;
-  document.getElementById("muteBtn").textContent = bgm.muted ? "🔊" : "🔇";
+// 🔥 youtu.be もそのまま使えるように自動変換
+function convertToEmbed(url){
+  if(url.includes("youtu.be/")){
+    const id = url.split("youtu.be/")[1];
+    return "https://www.youtube.com/embed/" + id;
+  }
+  return url;
 }
 
-// 5択3問クイズ
 const quizData = [
-{
-  question: "みんなが思うふくちゃんのすきなところは？",
-  choices: ["優しい","元気","努力家","明るい","行動力"],
-  youtubePerChoice: [
-    "https://www.youtube.com/embed/L_jWHffIx5E",
-    "https://www.youtube.com/embed/M7lc1UVf-VE",
-    "https://www.youtube.com/embed/9bZkp7q19f0",
-    "https://www.youtube.com/embed/L_jWHffIx5E",
-    "https://www.youtube.com/embed/M7lc1UVf-VE"
-  ]
-},
-{
-  question: "ふくちゃんのすごいところは？",
-  choices: ["行動力","明るさ","才能","センス","包容力"],
-  youtubePerChoice: [
-    "https://www.youtube.com/embed/9bZkp7q19f0",
-    "https://www.youtube.com/embed/L_jWHffIx5E",
-    "https://www.youtube.com/embed/M7lc1UVf-VE",
-    "https://www.youtube.com/embed/9bZkp7q19f0",
-    "https://www.youtube.com/embed/L_jWHffIx5E"
-  ]
-},
-{
-  question: "ふくちゃんにこれから頑張ってほしいことは？",
-  choices: ["夢を追い続ける","今のままで輝く","さらに挑戦する","健康第一","仲間を大切に"],
-  youtubePerChoice: [
-    "https://www.youtube.com/embed/M7lc1UVf-VE",
-    "https://www.youtube.com/embed/9bZkp7q19f0",
-    "https://www.youtube.com/embed/L_jWHffIx5E",
-    "https://www.youtube.com/embed/M7lc1UVf-VE",
-    "https://www.youtube.com/embed/9bZkp7q19f0"
-  ]
-}
+
+  {
+    question:"みんなが思うふくちゃんのすきなところは？",
+    choices:["真っ向勝負でずるくないところ","音の見せ方とアンサンブル力","なんでも合わせてくれる2nd力","あきら","情に厚くひと思いなところ"],
+    youtubePerChoice:[
+      "https://youtu.be/fpxalgJ0Svo",
+      "https://youtu.be/H5i2giLYp5M",
+      "https://youtu.be/9J7NDj3x4mc",
+      "https://www.youtube.com/embed/L_jWHffIx5E",
+      "https://youtu.be/aXlZ9Gun2gI"
+    ]
+  },
+
+  {
+    question:"ふくちゃんの尊敬するところは？",
+    choices:["すべてにおいて全力で取り組んでずるをしないところ","誰も嫌な気持ちにならないところ","有言実行なところ","あきら","語彙力が半端なくてたとえるのが上手なところ"],
+    youtubePerChoice:[
+      "https://youtu.be/JAkhFqdXWaU",
+      "https://youtu.be/pjDBJkqLqnI",
+      "https://youtu.be/IRUVDFOVJ9w",
+      "https://www.youtube.com/embed/9bZkp7q19f0",
+      "https://youtu.be/NvlI8-LPjk4"
+    ]
+  },
+
+  {
+    question:"それぞれのメッセージ",
+    choices:["かほ","なべ","かんた","あきら","ちはる","〇〇＆〇〇"],
+    youtubePerChoice:[
+      "https://youtu.be/OoegHu6Wm6Y",
+      "https://youtu.be/co-3cVDF8zg",
+      "https://youtu.be/gd09NqOwUSc",
+      "https://www.youtube.com/embed/M7lc1UVf-VE",
+      "https://youtu.be/xR7CKmwyVzg",
+      "https://youtu.be/q_uTN6iLcOY"
+    ]
+  }
+
 ];
 
 let currentQuestion = 0;
 
-function startQuiz() {
-  document.getElementById("titlePage").style.display = "none";
-  document.getElementById("quizPage").style.display = "block";
-
-  bgm.currentTime = 0;
-  const playPromise = bgm.play();
-  if (playPromise !== undefined){
-    playPromise.catch(()=>alert("音声再生がブロックされました。画面をタップしてください。"));
-  }
-
+function startQuiz(){
+  document.getElementById("titlePage").style.display="none";
+  document.getElementById("quizPage").style.display="block";
   loadQuestion();
 }
 
-function loadQuestion() {
+function loadQuestion(){
   const q = quizData[currentQuestion];
-  document.getElementById("question").textContent = q.question;
-  document.getElementById("result").textContent = "";
-  document.getElementById("youtubeWrapper").style.display = "none";
-  document.getElementById("videoFrame").src = "";
-  document.getElementById("nextBtn").style.display = "none";
+  document.getElementById("question").textContent=q.question;
+  document.getElementById("result").textContent="";
+  document.getElementById("youtubeWrapper").style.display="none";
+  document.getElementById("videoFrame").src="";
+  document.getElementById("nextBtn").style.display="none";
+
   const choicesEl = document.getElementById("choices");
-  choicesEl.innerHTML = "";
+  choicesEl.innerHTML="";
 
   for(let i=0;i<q.choices.length;i++){
     const btn = document.createElement("button");
-    btn.textContent = q.choices[i];
-    btn.className = "choice";
-    btn.onclick = ()=>checkAnswer(i);
+    btn.textContent=q.choices[i];
+    btn.className="choice";
+    btn.onclick=()=>checkAnswer(i);
     choicesEl.appendChild(btn);
   }
 }
 
 function checkAnswer(selected){
   const q = quizData[currentQuestion];
-  document.getElementById("result").textContent = "素敵な選択！🎉";
-  document.getElementById("youtubeWrapper").style.display = "block";
-  document.getElementById("videoFrame").src = q.youtubePerChoice[selected] + "?autoplay=1&mute=1";
-  document.getElementById("nextBtn").style.display = "inline-block";
+
+  document.getElementById("result").textContent="素敵な選択！🎉";
+  document.getElementById("youtubeWrapper").style.display="block";
+
+  const embedURL = convertToEmbed(q.youtubePerChoice[selected]);
+
+  document.getElementById("videoFrame").src =
+    embedURL + "?autoplay=1&mute=0";
+
+  document.getElementById("nextBtn").style.display="inline-block";
 }
 
 function nextQuestion(){
   currentQuestion++;
-  if(currentQuestion<quizData.length){
+
+  if(currentQuestion < quizData.length){
     loadQuestion();
-  }else{
-    bgm.pause();
-    document.getElementById("quizPage").style.display = "none";
-    document.getElementById("endVideoPage").style.display = "block";
+  } else {
+    document.getElementById("quizPage").style.display="none";
+    document.getElementById("endVideoPage").style.display="block";
+
+    const finalURL = convertToEmbed("https://youtu.be/TlP0V-h_aOI");
+
+    document.getElementById("finalVideo").src =
+      finalURL + "?autoplay=1&mute=0";
   }
 }
+
 </script>
 </body>
 </html>
