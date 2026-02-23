@@ -120,6 +120,7 @@ iframe {
 <div id="titlePage">
   <h1>🎉 ふくちゃん 🎉</h1>
   <h1>🎉 誕生日おめでとう 🎉</h1>
+  <p>今回はふくちゃん専用のクイズを用意しました！</p>
   <p>楽しみながら挑戦してみてね！</p>
   <button onclick="startQuiz()">スタート！</button>
 </div>
@@ -173,24 +174,24 @@ const quizData = [
 
   {
     question:"みんなが思うふくちゃんのすきなところは？",
-    choices:["真っ向勝負でずるくないところ","音の見せ方とアンサンブル力","なんでも合わせてくれる2nd力","あきら","情に厚くひと思いなところ"],
+    choices:["真っ向勝負でずるくないところ","音の見せ方とアンサンブル力","なんでも合わせてくれる2nd力","いつも明るくみんなを元気にしてくれるところ","情に厚くひと思いなところ"],
     youtubePerChoice:[
       "https://youtu.be/fpxalgJ0Svo",
       "https://youtu.be/H5i2giLYp5M",
       "https://youtu.be/9J7NDj3x4mc",
-      "https://youtu.be/QLY_0-Tsw14",
+      "https://youtu.be/1zy1uT-5u7U",
       "https://youtu.be/aXlZ9Gun2gI"
     ]
   },
 
   {
     question:"ふくちゃんの尊敬するところは？",
-    choices:["すべてにおいて全力で取り組んでずるをしないところ","誰も嫌な気持ちにならないところ","有言実行なところ","あきら","語彙力が半端なくてたとえるのが上手なところ"],
+    choices:["すべてにおいて全力で取り組んでずるをしないところ","誰も嫌な気持ちにならないところ","有言実行なところ","やると決めたらやりきる行動力","語彙力が半端なくてたとえるのが上手なところ"],
     youtubePerChoice:[
       "https://youtu.be/JAkhFqdXWaU",
       "https://youtu.be/pjDBJkqLqnI",
       "https://youtu.be/IRUVDFOVJ9w",
-      "https://youtu.be/QLY_0-Tsw14",
+      "https://youtu.be/6FP2QGxQkZc",
       "https://youtu.be/NvlI8-LPjk4"
     ]
   },
@@ -261,7 +262,7 @@ function nextQuestion(){
     document.getElementById("quizPage").style.display="none";
     document.getElementById("endVideoPage").style.display="block";
 
-    const finalURL = convertToEmbed("https://youtu.be/TlP0V-h_aOI");
+    const finalURL = convertToEmbed("https://youtu.be/UQ836VEtBhg");
 
     document.getElementById("finalVideo").src =
       finalURL + "?autoplay=1&mute=0";
