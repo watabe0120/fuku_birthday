@@ -254,6 +254,10 @@ function checkAnswer(selected){
 }
 
 function nextQuestion(){
+
+  // ★ 追加：今再生中の動画を停止
+  document.getElementById("videoFrame").src = "";
+
   currentQuestion++;
 
   if(currentQuestion < quizData.length){
